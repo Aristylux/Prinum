@@ -8,7 +8,7 @@
 COORD_cartesian polToCart(COORD_polar polarCoord)
 {
     COORD_cartesian cartCoord;
-    cartCoord.x = polarCoord.r * cos(polarCoord.teta);
-    cartCoord.y = polarCoord.r * sin(polarCoord.teta);
+    cartCoord.x = polarCoord.r * cos(polarCoord.theta);
+    cartCoord.y = polarCoord.r * sin(polarCoord.theta);
     return cartCoord;
 }

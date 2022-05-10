@@ -1,14 +1,14 @@
 #ifndef H_GL_CALCUL
 #define H_GL_CALCUL
 
-typedef struct {
+typedef struct COORD_cartesian{
     double x;
     double y;
 } COORD_cartesian;
 
-typedef struct {
+typedef struct COORD_polar{
     int r;
-    double teta;
+    double theta;
 } COORD_polar;
 
 COORD_cartesian polToCart(COORD_polar polarCoord);
