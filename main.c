@@ -11,11 +11,14 @@
 int main(void)
 {
     Hello();
-    COORD_polar coord_polar = {3, 30};
+    COORD_polar coord_polar = {3, 3*10};
     // coord_polar.r = 3;
     // coord_polar.teta = 30;
     COORD_cartesian coord_cart = polToCart(coord_polar);
-    printf("polar cordinate : (%d,%f) -> cartesian cordiante : (%f,%f)\n", coord_polar.r, coord_polar.teta, coord_cart.x, coord_cart.y);
+    printf("polar cordinate : (%d,%f) -> cartesian cordiante : (%f,%f)\n", coord_polar.r, coord_polar.theta, coord_cart.x, coord_cart.y);
+
+    Q_PrimeNumbers QueuePrimeNumbers;
+    init_queue(&QueuePrimeNumbers);
 
     Bool execute = True;
     Bool show_menu = True;
@@ -23,10 +26,6 @@ int main(void)
     char *response = (char *)calloc(LEN_RESPONSE, sizeof(char));
     if (allocTestChar(response, "var user response"))
         return EXIT_FAILURE;
-
-    int *prime_numbers = (int *)malloc(sizeof(int));
-    if (allocTestInt(prime_numbers, "prime_numbers"))
-        return 1;
 
     while (execute)
     {
@@ -39,19 +38,21 @@ int main(void)
             break;
         case 1:
             puts("primary number mode 1");
-            prime_numbers = calculatePrimeNumbers(prime_numbers);
+            calculatePrimeNumbers(&QueuePrimeNumbers);
             break;
         case 2:
             puts("primary number mode 2");
+            //until n primary numbers
             break;
         case 3:
-            showArray(prime_numbers);
+            show_PN(&QueuePrimeNumbers);
             break;
         case 4:
-            //showArrayPrimeNumber(prime_numbers);
+            show_NPN(&QueuePrimeNumbers);
             break;
         case 5:
-            //primeNumberCoord(prime_numbers);
+            calculate_coordinate(&QueuePrimeNumbers);
+            show_coordinate(&QueuePrimeNumbers);
             break;
         case 6:
             puts("save data");
@@ -69,5 +70,8 @@ int main(void)
         }
     }
 
+    free_queue(&QueuePrimeNumbers);
+    free(response);
+    response = NULL;
     return EXIT_SUCCESS;
 }

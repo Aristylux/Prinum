@@ -22,4 +22,6 @@ int strToInt(char *string);
 void invert(char *str);
 int power(int nbr, int puiss);
 
+void puts_deb(char *message);
+
 #endif
