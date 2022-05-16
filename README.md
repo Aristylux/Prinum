@@ -6,4 +6,4 @@ This program calculate primes numbers.
 
 - ide : VS code
 
-- OS  : Linux Ubuntu 18.x
+- OS  : Linux - Ubuntu 20.04.4 LTS
