@@ -7,6 +7,7 @@
 #include "./headers/menu.h"
 #include "./headers/prime_nbr.h"
 #include "./headers/arr.h"
+#include "./headers/files.h"
 
 int main(void)
 {
@@ -37,12 +38,10 @@ int main(void)
             execute = False;
             break;
         case 1:
-            puts("primary number mode 1");
             calculatePrimeNumbers(&QueuePrimeNumbers);
             break;
         case 2:
-            puts("primary number mode 2");
-            //until n primary numbers
+            nPrimeNumbers(&QueuePrimeNumbers);
             break;
         case 3:
             show_PN(&QueuePrimeNumbers);
@@ -51,17 +50,34 @@ int main(void)
             show_NPN(&QueuePrimeNumbers);
             break;
         case 5:
-            calculate_coordinate(&QueuePrimeNumbers);
             show_coordinate(&QueuePrimeNumbers);
             break;
         case 6:
-            puts("save data");
+            puts("export data");
+            saveData(&QueuePrimeNumbers, "test.dat");
             break;
         case 7:
-            puts("open graph");
+            puts("import data");
+            backUpData(&QueuePrimeNumbers, "test.dat");
             break;
         case 8:
-            testPrimeNumber();
+            puts("open graph");
+            break;
+        case 9:
+            puts("Which number ? ");
+            unsigned int nbr = askNumber();
+            if(testPrimeNumber(nbr))
+                printf("%d is a prime number.", nbr);
+            else
+                printf("%d is not a prime number", nbr);
+
+            break;
+        case 10:
+            //system("ls");
+            listFiles();
+            break;
+        case 11:
+            fileExist("mainc");
             break;
         default:
             puts("Incorrect command");
