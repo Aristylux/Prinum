@@ -8,6 +8,7 @@ typedef enum Bool
 } Bool;
 
 #define LEN_RESPONSE 10
+#define LEN_FILE 50
 
 // colors
 #define ESC "\x01b"

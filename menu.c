@@ -1,6 +1,5 @@
 #include "./headers/menu.h"
 
-
 /*
  * menu:
  * Affichage menu du jeu
@@ -32,13 +31,14 @@ void showMenu(void)
     puts("\t(2) Calculer n nombres premiers");
     puts("\t(3) Afficher les nombres premiers");
     puts("\t(4) Afficher les nombres premiers avec les nombres");
-    puts("\t(5) Calculer & Afficher coordonees");
+    puts("\t(5) Afficher avec les coordonees");
     puts("\t(6) Exporter la liste");
     puts("\t(7) Importer une liste de nombre premier");
     puts("\t(8) Afficher le graphique");
-    puts("\t(9) Tester si un nombre est primaire");
+    puts("\t(9) Tester si un nombre est premier");
+    puts("\t(10) Definition d'un nombre premier");
+    puts("\t(11) ");
 }
-
 
 /*
  * scan:
@@ -69,7 +69,8 @@ int scan(char *chaine, int length)
  * clearBuffer:
  * supprime les caractères qui se trouve dans stdin
  */
-void clearBuffer(void) {
+void clearBuffer(void)
+{
     int lastCharater = 0;
     while (lastCharater != '\n' && lastCharater != '\0')
     {
@@ -78,9 +79,10 @@ void clearBuffer(void) {
 }
 
 // verification if nbr is not too high before calculation
-int askNumber(void) {
-    //puts("How many primary numbers would you like ?");
-    char *response = (char *) calloc(LEN_RESPONSE, sizeof(char));
+int askNumber(void)
+{
+    // puts("How many primary numbers would you like ?");
+    char *response = (char *)calloc(LEN_RESPONSE, sizeof(char));
     if (allocTestChar(response, "var user number response"))
         return -1;
     Bool answer_correct = False;
@@ -106,10 +108,11 @@ int askNumber(void) {
  * en int
  * -> equivalent itoa();
  */
-int strToInt(char *string) {
+int strToInt(char *string)
+{
     int nombre = 0;
-    const unsigned int nombresInt[10] = { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 };
-    const char nombresStr[10] = { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9' };
+    const unsigned int nombresInt[10] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9};
+    const char nombresStr[10] = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9'};
     char *teststr = strpbrk(string, "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ");
     if (teststr == NULL && strlen(string) != 0)
     { // si il n'a pas trouvé de lettre
@@ -163,6 +166,25 @@ int power(int nbr, int puiss)
     return pnbr;
 }
 
-void puts_deb(char *message){
-    printf(".%s%s%s\n", MAGENTA, message, INIT);
+void puts_deb(char *message)
+{
+    printf(MAGENTA);
+    printf("$%s\n", message);
+    printf(INIT);
+}
+
+void puts_error(char *message)
+{
+    printf(BOLD);
+    printf(RED);
+    printf("/!\\ %s \n", message);
+    printf(INIT);
+}
+
+void puts_success(char *message)
+{
+    printf(BOLD);
+    printf(GREEN);
+    printf("%s\n", message);
+    printf(INIT);
 }

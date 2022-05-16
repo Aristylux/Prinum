@@ -7,4 +7,6 @@
 Bool allocTestChar(char *ptr, char *error_message);
 Bool allocTestInt(int *ptr, char *error_message);
 
+//void freePtrChar(char *ptr);
+
 #endif

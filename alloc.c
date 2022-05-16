@@ -32,3 +32,10 @@ Bool allocTestInt(int *ptr, char *error_message)
     else
         return 0;
 }
+
+/*
+void freePtrChar(char *ptr){
+    free(ptr);
+    ptr = NULL;
+}
+*/
