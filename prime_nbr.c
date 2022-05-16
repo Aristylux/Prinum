@@ -4,7 +4,7 @@ Bool testPrimeNumber(unsigned int nbr)
 {
     // fill array odd_numbers
     Bool isPrime;
-    int *odd_numbers = (int *)malloc((nbr / 2) * sizeof(int));
+    int *odd_numbers = (int *)malloc(((nbr / 2) + 1) * sizeof(int));
     if (allocTestInt(odd_numbers, "odd_numbers"))
         return -1;
     fillArrayOddNumbers(odd_numbers, nbr);
@@ -60,7 +60,7 @@ void nPrimeNumbers(Q_PrimeNumbers *prime_numbers_queue){
     unsigned int current_nbr = 1, count = 1;
     while (count <= nbr)
     {
-        printf("c : %d - \t n : %d\n", current_nbr, count);
+        //printf("c : %d - \t n : %d\n", current_nbr, count);
         if(testPrimeNumber(current_nbr)){
             COORD_polar coordP = {current_nbr, current_nbr*10};
             COORD_cartesian coordC = polToCart(coordP);
@@ -203,29 +203,20 @@ void show_PN(Q_PrimeNumbers *queue){
  */
 void show_NPN(Q_PrimeNumbers *queue)
 {
+    printf("\n\n");
+    if(length_queue(queue) == 0){
+        puts("Empty queue !");
+        return;
+    }
+
     PrimeNumber *Element = queue->first, *lastElement = last_element_queue(queue);
     const unsigned int colums = 10;
     unsigned int col_pos = 1, b = 1;
     int i = 1;
-    if(length_queue(queue) == 0)
-        return;
-
-
-    unsigned int count = 0;
-    while (Element != NULL)
-    {
-        count++;
-    }
-    if (count == 0)
-    {
-        puts_deb("Empty");
-        return;
-    }
     
-// last_element_queue is error
     if(request_continue(queue, 20, "The result is too large. show anyway?") == False)
         return;
-    printf("\n\n");
+    
     while(1)
     {
         //printf("%s%d - %d%s\n", RED, i, Element->primeNumber, INIT);
@@ -337,6 +328,7 @@ void free_queue(Q_PrimeNumbers *queue){
     while(deQueue(queue, &value) == 1);
 }
 
+//improvemnt: same but with [N/y]
 Bool request_continue(Q_PrimeNumbers *queue, unsigned int nbr, char* message){
     char *response = (char *)calloc(LEN_RESPONSE, sizeof(char));
     if (allocTestChar(response, "var user response"))

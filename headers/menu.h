@@ -23,5 +23,6 @@ void invert(char *str);
 int power(int nbr, int puiss);
 
 void puts_deb(char *message);
-
+void puts_error(char *message);
+void puts_success(char *message);
 #endif

@@ -28,6 +28,10 @@ int main(void)
     if (allocTestChar(response, "var user response"))
         return EXIT_FAILURE;
 
+    char *fileName = (char *)calloc(LEN_FILE, sizeof(char));
+    if (allocTestChar(fileName, "var user response"))
+        return-1;
+
     while (execute)
     {
         menu(&show_menu, response);
@@ -54,11 +58,10 @@ int main(void)
             break;
         case 6:
             puts("export data");
-            saveData(&QueuePrimeNumbers, "test.dat");
+            saveFile(&QueuePrimeNumbers);
             break;
         case 7:
-            puts("import data");
-            backUpData(&QueuePrimeNumbers, "test.dat");
+            openFile(&QueuePrimeNumbers);
             break;
         case 8:
             puts("open graph");
@@ -74,10 +77,25 @@ int main(void)
             break;
         case 10:
             //system("ls");
-            listFiles();
+            listFiles(".");
+            printf("\n\n\n");
+            listFiles("./data");
+            //directoryExist();
             break;
         case 11:
-            fileExist("mainc");
+            if(fileExist("data","fr.pnba"))
+                puts_deb("exist");
+            else
+                puts_deb("doesn't exist");
+            break;
+        case 12:
+            //quesqu'un nombre premier
+            
+            strcpy(fileName, "bonj our.fr");
+            formatingFileName(fileName);
+            printf(" : %s\n", fileName);
+            free(fileName);
+            fileName = NULL;
             break;
         default:
             puts("Incorrect command");

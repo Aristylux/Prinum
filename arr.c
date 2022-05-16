@@ -20,7 +20,7 @@ int arrlen(int *array)
 void showArray(int *array)
 {
     int colums = 10;
-    //printf("\nsize of array : %d - %d\n", array[0], array[0] - 1);
+    // printf("\nsize of array : %d - %d\n", array[0], array[0] - 1);
     printf("\nsize of array : %d\n", array[0]);
     printf("\n\n");
     for (int i = 1, a = 1; i < arrlen(array); i++)
@@ -56,9 +56,9 @@ void fillArray(int *list_numbers, int *odd_numbers, int nbr)
     }
 }
 
-
-void fillArrayOddNumbers(int *odd_numbers, int nbr){
-    odd_numbers[0] = nbr/2; //len
+void fillArrayOddNumbers(int *odd_numbers, int nbr)
+{
+    odd_numbers[0] = nbr / 2; // len
     for (int i = 1, a = 1; i < nbr + 1; i++)
     {
         if (i % 2 && i != 1)
@@ -66,7 +66,5 @@ void fillArrayOddNumbers(int *odd_numbers, int nbr){
             odd_numbers[a] = i;
             a++;
         }
-        
     }
-    
 }

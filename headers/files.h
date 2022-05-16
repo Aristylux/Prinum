@@ -3,10 +3,19 @@
 #include "prime_nbr.h"
 #include <dirent.h>
 
-int saveData(Q_PrimeNumbers *prime_numbers_queue , const char filename[]);
+#define DIRECTORY_DATA "data"
+
+int saveData(Q_PrimeNumbers * prime_numbers_queue, const char fileName[]);
 int backUpData(Q_PrimeNumbers *prime_numbers_queue, const char filename[]);
 
-int listFiles(void);
-int fileExist(char * fileName);
+int listFiles(char *path);
+int fileExist(char * path, char * fileName);
+
+void directoryExist(void);
+int saveFile(Q_PrimeNumbers * prime_numbers_queue);
+void formatingFileName(char *fileName);
+void formatingPath(char *fileName, char *path);
+
+int openFile(Q_PrimeNumbers * prime_numbers_queue);
 
 #endif
