@@ -1,32 +1,28 @@
 #include "./headers/prime_nbr.h"
 
-int testPrimeNumber(void)
+Bool testPrimeNumber(unsigned int nbr)
 {
-    puts("Which number ? ");
-    unsigned int nbr = askNumber();
-
     // fill array odd_numbers
+    Bool isPrime;
     int *odd_numbers = (int *)malloc((nbr / 2) * sizeof(int));
     if (allocTestInt(odd_numbers, "odd_numbers"))
         return -1;
     fillArrayOddNumbers(odd_numbers, nbr);
 
     if (isPrimeNumber(nbr, odd_numbers) == 1)
-    {
-        printf("%d is a prime number.", nbr);
-        return 1;
-    }
+        isPrime = True;
     else
-    {
-        printf("%d is not a prime number", nbr);
-        return 0;
-    }
+        isPrime = False;
     free(odd_numbers);
     odd_numbers = NULL;
+    return isPrime;
 }
 
 Q_PrimeNumbers * calculatePrimeNumbers(Q_PrimeNumbers *prime_numbers_queue){
-    puts("How many primary numbers would you like ?");
+    if(request_continue(prime_numbers_queue, 1, "A queue already exists, do you want to delete it ?") == False)
+        return prime_numbers_queue;
+    
+    puts("Search for prime number up to what number ?");
     unsigned int nbr = askNumber();
     printf("You enter : %d\n", nbr);
 
@@ -51,22 +47,48 @@ Q_PrimeNumbers * calculatePrimeNumbers(Q_PrimeNumbers *prime_numbers_queue){
 
 }
 
+
+void nPrimeNumbers(Q_PrimeNumbers *prime_numbers_queue){
+    if(request_continue(prime_numbers_queue, 1, "A queue already exists, do you want to delete it ?") == False)
+        return;
+    puts("How many primary numbers would you like ?");
+    unsigned int nbr = askNumber();
+    printf("You enter : %d\n", nbr);
+
+    free_queue(prime_numbers_queue);
+    puts("Init");
+    unsigned int current_nbr = 1, count = 1;
+    while (count <= nbr)
+    {
+        printf("c : %d - \t n : %d\n", current_nbr, count);
+        if(testPrimeNumber(current_nbr)){
+            COORD_polar coordP = {current_nbr, current_nbr*10};
+            COORD_cartesian coordC = polToCart(coordP);
+            enQueue(prime_numbers_queue, current_nbr, coordC, coordP);
+            count++;
+        }
+        current_nbr++;
+    }
+    puts("Finish.");
+}
+
 /*
  * researchPrimeNumber:
  *
  */
-Q_PrimeNumbers * researchPrimeNumber(int nbr, Q_PrimeNumbers * prime_number_queue, int * list_numbers, int * odd_numbers){
-    //PrimeNumber * Element;
+Q_PrimeNumbers * researchPrimeNumber(int nbr, Q_PrimeNumbers * prime_numbers_queue, int * list_numbers, int * odd_numbers){
     for (int i = 1; i < nbr + 1; i++)
     {
         if (isPrimeNumber(list_numbers[i], odd_numbers) == 1)
         {
             //Element = create_node(list_numbers[i]);
             //prime_number_list = insert_node(prime_number_list, Element);
-            enQueue(prime_number_queue, list_numbers[i]);
+            COORD_polar coordP = {list_numbers[i], list_numbers[i]*10};
+            COORD_cartesian coordC = polToCart(coordP);
+            enQueue(prime_numbers_queue, list_numbers[i], coordC, coordP);
         }
     }
-    return prime_number_queue;
+    return prime_numbers_queue;
 }
 
 /*
@@ -113,6 +135,7 @@ Bool isPrimeNumber(int number, int *odd_numbers)
  * primeNumberCoord:
  * calcul and show coordonate for all points.
  * for prime numbers
+ * /// not used ///
  */
 void calculate_coordinate(Q_PrimeNumbers *queue){
     PrimeNumber *Element = queue->first;
@@ -120,29 +143,15 @@ void calculate_coordinate(Q_PrimeNumbers *queue){
     {
         COORD_polar coordP = {Element->primeNumber, Element->primeNumber*10};
         COORD_cartesian coordC = polToCart(coordP);
-        //Element->coord_cartesian = &coordC;
-        //Element->coord_cartesian->x = coordC.x;
-        //Element->coord_cartesian->y = coordC.y;
-        //Element->coord_polar->r = coordP.r;
-        //Element->coord_polar->theta = coordP.theta;
-
-
-        //printf("\t%4d |  (%3d,%3f)  |  (%3f,%3f)  |\n", Element->primeNumber, Element->coord_polar->r, Element->coord_polar->theta, Element->coord_cartesian->x, Element->coord_cartesian->y);
-        
-        //printf("%2d %2d %.2f\n", Element->primeNumber, coordP.r, coordP.theta);
-        
         Element->coord_polar = coordP;
         Element->coord_cartesian = coordC;
-
-        //printf("%2d %2d %.2f\n", Element->primeNumber, Element->coord_polar->r, Element->coord_polar->theta);
-
         Element = Element->next;
     }
 }
 
 void show_coordinate(Q_PrimeNumbers *queue){
     PrimeNumber *Element = queue->first;
-    if(request_continue(queue) == False)
+    if(request_continue(queue, 30, "The result is too large. show anyway?") == False)
         return;
     printf("\t/-------------+------------------+----------------------\\\n");
     printf("\t| Prime Nbr   |  ( r ,  θ )      |  ( x   ,   y )       |\n");
@@ -165,7 +174,7 @@ void show_PN(Q_PrimeNumbers *queue){
     PrimeNumber *Element = queue->first;
     unsigned int count = 0, a = 1;
     const unsigned int colums = 10;
-    if(request_continue(queue) == False)
+    if(request_continue(queue, 30, "The result is too large. show anyway?") == False)
         return;
 
     printf("\n\n");
@@ -198,12 +207,29 @@ void show_NPN(Q_PrimeNumbers *queue)
     const unsigned int colums = 10;
     unsigned int col_pos = 1, b = 1;
     int i = 1;
-    if(request_continue(queue) == False)
+    if(length_queue(queue) == 0)
+        return;
+
+
+    unsigned int count = 0;
+    while (Element != NULL)
+    {
+        count++;
+    }
+    if (count == 0)
+    {
+        puts_deb("Empty");
+        return;
+    }
+    
+// last_element_queue is error
+    if(request_continue(queue, 20, "The result is too large. show anyway?") == False)
         return;
     printf("\n\n");
     while(1)
     {
         //printf("%s%d - %d%s\n", RED, i, Element->primeNumber, INIT);
+        
         if (i == Element->primeNumber)
         {
             printf("%s%4d%s\t", RED, i, INIT);
@@ -231,7 +257,7 @@ void show_NPN(Q_PrimeNumbers *queue)
  * 0 if there is an error
  * 1 if the new element is in queue
  */
-Bool enQueue(Q_PrimeNumbers *queue, int newPrimeNumber){
+Bool enQueue(Q_PrimeNumbers *queue, int newPrimeNumber, COORD_cartesian coordC, COORD_polar coordP){
     PrimeNumber *Element = (PrimeNumber*) malloc(sizeof(PrimeNumber));
     if (Element == NULL)
     {
@@ -239,13 +265,8 @@ Bool enQueue(Q_PrimeNumbers *queue, int newPrimeNumber){
         return 0;
     } else {
         Element->primeNumber = newPrimeNumber;
-        /*
-        COORD_polar coordP = {newPrimeNumber, newPrimeNumber*10};
-        COORD_cartesian coordC = polToCart(coordP);
-        Element->coord_polar.r = coordP.r;
-        Element->coord_polar.theta = coordP.theta;
-        //Element->coord_cartesian = &coordC;
-*/
+        Element->coord_cartesian = coordC;
+        Element->coord_polar = coordP;
         Element->next = NULL;
         if (length_queue(queue) == 0)   //Empty queue
             queue->first = Element;
@@ -269,7 +290,7 @@ Bool deQueue(Q_PrimeNumbers *queue, int *delPrimeNumber){
     PrimeNumber *DelElement;
     if (length_queue(queue) == 0)
     {
-        puts("Empty queue");
+        //puts("Empty queue");
         DelElement = NULL;
         return 0;
     }
@@ -316,7 +337,7 @@ void free_queue(Q_PrimeNumbers *queue){
     while(deQueue(queue, &value) == 1);
 }
 
-Bool request_continue(Q_PrimeNumbers *queue){
+Bool request_continue(Q_PrimeNumbers *queue, unsigned int nbr, char* message){
     char *response = (char *)calloc(LEN_RESPONSE, sizeof(char));
     if (allocTestChar(response, "var user response"))
         return 0;
@@ -324,9 +345,9 @@ Bool request_continue(Q_PrimeNumbers *queue){
     Bool show = False;
     Bool error = True;
 
-    if (length_queue(queue) > 30)
+    if (length_queue(queue) > nbr)
     {
-        printf("%sThe result is too large. show anyway? [Y/n]%s ", REVERSED , INIT);
+        printf("%s%s [Y/n]%s ", REVERSED, message , INIT);
         scan(response, LEN_RESPONSE);
         if (strcasecmp(response, "y") == 0 || strlen(response) == 0)
         {

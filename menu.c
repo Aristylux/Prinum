@@ -32,10 +32,11 @@ void showMenu(void)
     puts("\t(2) Calculer n nombres premiers");
     puts("\t(3) Afficher les nombres premiers");
     puts("\t(4) Afficher les nombres premiers avec les nombres");
-    puts("\t(5) Afficher coordonees");
-    puts("\t(6) Enregistrer les resultats");
-    puts("\t(7) Afficher le graphique");
-    puts("\t(8) Tester si un nombre est primaire");
+    puts("\t(5) Calculer & Afficher coordonees");
+    puts("\t(6) Exporter la liste");
+    puts("\t(7) Importer une liste de nombre premier");
+    puts("\t(8) Afficher le graphique");
+    puts("\t(9) Tester si un nombre est primaire");
 }
 
 
