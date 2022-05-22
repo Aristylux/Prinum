@@ -1,8 +1,25 @@
 #include "./headers/prime_nbr.h"
 
+void PN_calc_test(void)
+{
+    puts("Which number ? ");
+    unsigned int nbr = askNumber();
+    if (testPrimeNumber(nbr))
+        printf("%d is a prime number.", nbr);
+    else
+        printf("%d is not a prime number", nbr);
+}
+
+/*
+ * testPrimeNumber:
+ * test if "nbr" is a prime number
+ * fill array and test
+ * return :
+ * True if yes
+ * False else
+ */
 Bool testPrimeNumber(unsigned int nbr)
 {
-    // fill array odd_numbers
     Bool isPrime;
     int *odd_numbers = (int *)malloc(((nbr / 2) + 1) * sizeof(int));
     if (allocTestInt(odd_numbers, "odd_numbers"))
@@ -18,10 +35,11 @@ Bool testPrimeNumber(unsigned int nbr)
     return isPrime;
 }
 
-Q_PrimeNumbers * calculatePrimeNumbers(Q_PrimeNumbers *prime_numbers_queue){
-    if(request_continue(prime_numbers_queue, 1, "A queue already exists, do you want to delete it ?") == False)
+Q_PrimeNumbers *PN_calc_until(Q_PrimeNumbers *prime_numbers_queue)
+{
+    if (request_continue(prime_numbers_queue, 1, "A queue already exists, do you want to delete it ?") == False)
         return prime_numbers_queue;
-    
+    // verification if nbr is not too high before calculation
     puts("Search for prime number up to what number ?");
     unsigned int nbr = askNumber();
     printf("You enter : %d\n", nbr);
@@ -44,12 +62,11 @@ Q_PrimeNumbers * calculatePrimeNumbers(Q_PrimeNumbers *prime_numbers_queue){
     free(odd_numbers);
     odd_numbers = NULL;
     return prime_numbers_queue;
-
 }
 
-
-void nPrimeNumbers(Q_PrimeNumbers *prime_numbers_queue){
-    if(request_continue(prime_numbers_queue, 1, "A queue already exists, do you want to delete it ?") == False)
+void PN_calc_nPN(Q_PrimeNumbers *prime_numbers_queue)
+{
+    if (request_continue(prime_numbers_queue, 1, "A queue already exists, do you want to delete it ?") == False)
         return;
     puts("How many primary numbers would you like ?");
     unsigned int nbr = askNumber();
@@ -60,9 +77,10 @@ void nPrimeNumbers(Q_PrimeNumbers *prime_numbers_queue){
     unsigned int current_nbr = 1, count = 1;
     while (count <= nbr)
     {
-        //printf("c : %d - \t n : %d\n", current_nbr, count);
-        if(testPrimeNumber(current_nbr)){
-            COORD_polar coordP = {current_nbr, current_nbr*10};
+        // printf("c : %d - \t n : %d\n", current_nbr, count);
+        if (testPrimeNumber(current_nbr))
+        {
+            COORD_polar coordP = {current_nbr, current_nbr * 10};
             COORD_cartesian coordC = polToCart(coordP);
             enQueue(prime_numbers_queue, current_nbr, coordC, coordP);
             count++;
@@ -76,14 +94,15 @@ void nPrimeNumbers(Q_PrimeNumbers *prime_numbers_queue){
  * researchPrimeNumber:
  *
  */
-Q_PrimeNumbers * researchPrimeNumber(int nbr, Q_PrimeNumbers * prime_numbers_queue, int * list_numbers, int * odd_numbers){
+Q_PrimeNumbers *researchPrimeNumber(int nbr, Q_PrimeNumbers *prime_numbers_queue, int *list_numbers, int *odd_numbers)
+{
     for (int i = 1; i < nbr + 1; i++)
     {
         if (isPrimeNumber(list_numbers[i], odd_numbers) == 1)
         {
-            //Element = create_node(list_numbers[i]);
-            //prime_number_list = insert_node(prime_number_list, Element);
-            COORD_polar coordP = {list_numbers[i], list_numbers[i]*10};
+            // Element = create_node(list_numbers[i]);
+            // prime_number_list = insert_node(prime_number_list, Element);
+            COORD_polar coordP = {list_numbers[i], list_numbers[i] * 10};
             COORD_cartesian coordC = polToCart(coordP);
             enQueue(prime_numbers_queue, list_numbers[i], coordC, coordP);
         }
@@ -106,7 +125,7 @@ Bool isPrimeNumber(int number, int *odd_numbers)
     if (isImpair == True)
     {
         // printf("%d is a impair number\n", number);
-        for (int i = 1; i < arrlen(odd_numbers); i++)
+        for (unsigned int i = 1; i < arrlen(odd_numbers); i++)
         {
             if (number != odd_numbers[i])
             {
@@ -122,7 +141,7 @@ Bool isPrimeNumber(int number, int *odd_numbers)
     else
     {
         // printf("%d is a pair number\n", number);
-        //for '2'
+        // for '2'
         int result = number / 2;
         if (result == 1)
             return 1;
@@ -137,11 +156,12 @@ Bool isPrimeNumber(int number, int *odd_numbers)
  * for prime numbers
  * /// not used ///
  */
-void calculate_coordinate(Q_PrimeNumbers *queue){
+void calculate_coordinate(Q_PrimeNumbers *queue)
+{
     PrimeNumber *Element = queue->first;
     while (Element != NULL)
     {
-        COORD_polar coordP = {Element->primeNumber, Element->primeNumber*10};
+        COORD_polar coordP = {Element->primeNumber, Element->primeNumber * 10};
         COORD_cartesian coordC = polToCart(coordP);
         Element->coord_polar = coordP;
         Element->coord_cartesian = coordC;
@@ -149,9 +169,10 @@ void calculate_coordinate(Q_PrimeNumbers *queue){
     }
 }
 
-void show_coordinate(Q_PrimeNumbers *queue){
+void PN_show_coordinate(Q_PrimeNumbers *queue)
+{
     PrimeNumber *Element = queue->first;
-    if(request_continue(queue, 30, "The result is too large. show anyway?") == False)
+    if (request_continue(queue, 30, "The result is too large. show anyway?") == False)
         return;
     printf("\t/-------------+------------------+----------------------\\\n");
     printf("\t| Prime Nbr   |  ( r ,  θ )      |  ( x   ,   y )       |\n");
@@ -165,16 +186,18 @@ void show_coordinate(Q_PrimeNumbers *queue){
 }
 
 //------------ Queue ------------
-void init_queue(Q_PrimeNumbers *queue){
+void init_queue(Q_PrimeNumbers *queue)
+{
     queue->first = NULL;
     queue->last = NULL;
 }
 
-void show_PN(Q_PrimeNumbers *queue){
+void PN_show(Q_PrimeNumbers *queue)
+{
     PrimeNumber *Element = queue->first;
     unsigned int count = 0, a = 1;
     const unsigned int colums = 10;
-    if(request_continue(queue, 30, "The result is too large. show anyway?") == False)
+    if (request_continue(queue, 30, "The result is too large. show anyway?") == False)
         return;
 
     printf("\n\n");
@@ -192,19 +215,20 @@ void show_PN(Q_PrimeNumbers *queue){
     }
     if (count == 0)
         puts("Empty queue !");
-    else 
+    else
         printf("\n\nNumbers : %d\n", count);
 }
 
-/* 
+/*
  * show_NPN:
  * show prime numbers with high light
  * with other numbers.
  */
-void show_NPN(Q_PrimeNumbers *queue)
+void PN_show_numbers(Q_PrimeNumbers *queue)
 {
     printf("\n\n");
-    if(length_queue(queue) == 0){
+    if (length_queue(queue) == 0)
+    {
         puts("Empty queue !");
         return;
     }
@@ -213,19 +237,19 @@ void show_NPN(Q_PrimeNumbers *queue)
     const unsigned int colums = 10;
     unsigned int col_pos = 1, b = 1;
     int i = 1;
-    
-    if(request_continue(queue, 20, "The result is too large. show anyway?") == False)
+
+    if (request_continue(queue, 20, "The result is too large. show anyway?") == False)
         return;
-    
-    while(1)
+
+    while (1)
     {
         //printf("%s%d - %d%s\n", RED, i, Element->primeNumber, INIT);
-        
+
         if (i == Element->primeNumber)
         {
-            printf("%s%4d%s\t", RED, i, INIT);
+            printf("%s%s%4d%s\t", BOLD, RED, i, INIT);
             b++;
-            if(Element->next != NULL)
+            if (Element->next != NULL)
                 Element = Element->next;
         }
         else
@@ -240,6 +264,10 @@ void show_NPN(Q_PrimeNumbers *queue)
         col_pos++;
         i++;
     }
+
+    puts_cl("\n\t&uLegende :&/");
+    puts_cl("\t&r&o\"XXX\" : prime number&/");
+    puts_cl("\t\"XXX\" : number");
 }
 
 /*
@@ -248,25 +276,27 @@ void show_NPN(Q_PrimeNumbers *queue)
  * 0 if there is an error
  * 1 if the new element is in queue
  */
-Bool enQueue(Q_PrimeNumbers *queue, int newPrimeNumber, COORD_cartesian coordC, COORD_polar coordP){
-    PrimeNumber *Element = (PrimeNumber*) malloc(sizeof(PrimeNumber));
+Bool enQueue(Q_PrimeNumbers *queue, int newPrimeNumber, COORD_cartesian coordC, COORD_polar coordP)
+{
+    PrimeNumber *Element = (PrimeNumber *)malloc(sizeof(PrimeNumber));
     if (Element == NULL)
     {
         puts("allocation error");
         return 0;
-    } else {
+    }
+    else
+    {
         Element->primeNumber = newPrimeNumber;
         Element->coord_cartesian = coordC;
         Element->coord_polar = coordP;
         Element->next = NULL;
-        if (length_queue(queue) == 0)   //Empty queue
+        if (length_queue(queue) == 0) // Empty queue
             queue->first = Element;
-        else    //not empty queue
+        else // not empty queue
             queue->last->next = Element;
         queue->last = Element;
         return 1;
     }
-    
 }
 
 /*
@@ -277,15 +307,17 @@ Bool enQueue(Q_PrimeNumbers *queue, int newPrimeNumber, COORD_cartesian coordC, 
  * 0 if empty queue
  * 1 if element is dequeue
  */
-Bool deQueue(Q_PrimeNumbers *queue, int *delPrimeNumber){
+Bool deQueue(Q_PrimeNumbers *queue, int *delPrimeNumber)
+{
     PrimeNumber *DelElement;
     if (length_queue(queue) == 0)
     {
-        //puts("Empty queue");
+        // puts("Empty queue");
         DelElement = NULL;
         return 0;
     }
-    else {
+    else
+    {
         DelElement = queue->first;
         *delPrimeNumber = DelElement->primeNumber;
         queue->first = DelElement->next;
@@ -296,7 +328,8 @@ Bool deQueue(Q_PrimeNumbers *queue, int *delPrimeNumber){
     }
 }
 
-unsigned int length_queue(Q_PrimeNumbers *queue){
+unsigned int length_queue(Q_PrimeNumbers *queue)
+{
     PrimeNumber *Element = queue->first;
     unsigned int count = 0;
     while (Element != NULL)
@@ -307,14 +340,15 @@ unsigned int length_queue(Q_PrimeNumbers *queue){
     return count;
 }
 
-PrimeNumber *last_element_queue(Q_PrimeNumbers *queue){
+PrimeNumber *last_element_queue(Q_PrimeNumbers *queue)
+{
     PrimeNumber *Element = queue->first;
     unsigned int nbr = length_queue(queue);
-    for (unsigned int i = 0; i < nbr-1; i++)
+    for (unsigned int i = 0; i < nbr - 1; i++)
     {
         Element = Element->next;
     }
-    //printf("last nbr : %d", Element->primeNumber);
+    // printf("last nbr : %d", Element->primeNumber);
     return Element;
 }
 
@@ -323,13 +357,16 @@ PrimeNumber *last_element_queue(Q_PrimeNumbers *queue){
  * Tant que la file n'est pas vide.
  * On enlève l'élément courant.
  */
-void free_queue(Q_PrimeNumbers *queue){
+void free_queue(Q_PrimeNumbers *queue)
+{
     int value;
-    while(deQueue(queue, &value) == 1);
+    while (deQueue(queue, &value) == 1)
+        ;
 }
 
-//improvemnt: same but with [N/y]
-Bool request_continue(Q_PrimeNumbers *queue, unsigned int nbr, char* message){
+// improvemnt: same but with [N/y]
+Bool request_continue(Q_PrimeNumbers *queue, unsigned int nbr, char *message)
+{
     char *response = (char *)calloc(LEN_RESPONSE, sizeof(char));
     if (allocTestChar(response, "var user response"))
         return 0;
@@ -339,7 +376,7 @@ Bool request_continue(Q_PrimeNumbers *queue, unsigned int nbr, char* message){
 
     if (length_queue(queue) > nbr)
     {
-        printf("%s%s [Y/n]%s ", REVERSED, message , INIT);
+        printf("%s%s [Y/n]%s ", REVERSED, message, INIT);
         scan(response, LEN_RESPONSE);
         if (strcasecmp(response, "y") == 0 || strlen(response) == 0)
         {

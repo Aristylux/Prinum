@@ -3,7 +3,6 @@
 #include <stdio.h>
 #include "def.h"
 
-/*your declaration here */
 Bool allocTestChar(char *ptr, char *error_message);
 Bool allocTestInt(int *ptr, char *error_message);
 

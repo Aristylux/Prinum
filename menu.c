@@ -1,6 +1,26 @@
 #include "./headers/menu.h"
 
 /*
+ * showWelcome:
+ * Display message welcome
+ */
+void showWelcome(void)
+{
+    puts("\n\n");
+    printf(BOLD);
+    printf(BLUE);
+    puts("\t/--------------------\\");
+    puts("\t|       Prinum       |");
+    puts("\t|                    |");
+    puts("\t|    prime number    |");
+    puts("\t|     calculator     |");
+    puts("\t| 2022 - version 2.1 |");
+    puts("\t\\--------------------/");
+    printf(INIT);
+    puts("\n\n");
+}
+
+/*
  * menu:
  * Affichage menu du jeu
  * et demande a l'ultilisateur
@@ -13,8 +33,7 @@ void menu(Bool *show, char *response)
 {
     if (*show == True)
     {
-        // puts("\t(0) Jouer \t\t(1) Quitter");
-        showMenu();
+        showMenu(False);
         *show = False;
     }
     printf("\n\n > ");
@@ -23,21 +42,70 @@ void menu(Bool *show, char *response)
 
 /*
  * showMenu:
+ * puts_deb : function in develpment
+ * if isHelp == True
+ * display help messages
  */
-void showMenu(void)
+void showMenu(Bool isHelp)
 {
-    puts("\t(0) Quitter");
-    puts("\t(1) Calculer jusqu'à n");
-    puts("\t(2) Calculer n nombres premiers");
-    puts("\t(3) Afficher les nombres premiers");
-    puts("\t(4) Afficher les nombres premiers avec les nombres");
-    puts("\t(5) Afficher avec les coordonees");
-    puts("\t(6) Exporter la liste");
-    puts("\t(7) Importer une liste de nombre premier");
-    puts("\t(8) Afficher le graphique");
-    puts("\t(9) Tester si un nombre est premier");
-    puts("\t(10) Definition d'un nombre premier");
-    puts("\t(11) ");
+    if (isHelp == True)
+        puts_success("\tHelp : description menu");
+    printf("\n\t(0)  Quitter");
+    if (isHelp == True)
+        puts_cl(":\n\t\t&oExit&/ program.");
+    printf("\n\t(1)  Calculer jusqu'à n");
+    if (isHelp == True)
+        puts_cl(":\n\t\t&oCalculates&/ prime numbers up to given number : n.");
+    printf("\n\t(2)  Calculer n nombres premiers");
+    if (isHelp == True)
+        puts_cl(":\n\t\t&oCalculate&/ the requested number &un&/ of prime number.");
+    printf("\n\t(3)  Tester si un nombre est premier");
+    if (isHelp == True)
+        puts_cl(":\n\t\t&oChecks&/ whether a given number is &uprime or not&/");
+    printf("\n\t(4)  Afficher les nombres premiers");
+    if (isHelp == True)
+        puts_cl(":\n\t\t&oDisplays&/ the list of prime numbers only");
+    printf("\n\t(5)  Afficher les nombres premiers avec les nombres");
+    if (isHelp == True)
+        puts_cl(":\n\t\t&oDisplays&/ the list of prime numbers with other numbers");
+    printf("\n\t(6)  Afficher avec les coordonees");
+    if (isHelp == True)
+        puts_cl(":\n\t\t&oDisplays&/ the coordinates of the points of the prime numbers");
+    printf("\n\t(7)  Exporter la liste");
+    if (isHelp == True)
+        puts_cl(":\n\t\t&oExport&/ the list in format .pnba");
+    printf("\n\t(8)  Enregistrer la liste");
+    if(isHelp == True)
+        puts_cl(":\n\t\t&oExport&/ the list in format .csv");
+    printf("\n\t(9)  Importer une liste de nombre premier");
+    if (isHelp == True)
+        puts_cl(":\n\t\t&oImport&/ the list in format .pnba");
+    printf("\n\t(10)  Afficher le graphique");
+    if (isHelp == True)
+        puts_cl(":\n\t\t&i&mFeature under development&/");
+    printf("\n\t(11) Definition d'un nombre premier");
+    if (isHelp == True)
+        puts_cl(":\n\t\t&oDisplays&/ the definition of a prime number and example.");
+    printf("\n\t(12) Aide");
+    if (isHelp == True)
+        puts_cl(":\n\t\t&oShow&/ help.");
+}
+
+/*
+ * definition;
+ * quesqu'un nombre premier
+ */
+void definition(void)
+{
+    puts_success("\tDefinition : prime numbers\n");
+    puts_cl("\tA &inatural number&/ (1, 2, 3, 4, 5, 6, etc.) is called a &iprime number&/ (or a prime)");
+    puts_cl("\tIf it is &ogreater than 1&/ and cannot be written as the product of two smaller natural numbers.");
+    puts_cl("\n\tFor example :");
+    puts_cl("\t5 is &oprime&/ because the only ways of writing it as a product,");
+    puts_cl("\t1 × 5 or 5 × 1, involve 5 itself.");
+    puts_cl("\tHowever, 4 is &ocomposite&/ because it is a product &o(2 × 2)&/");
+    puts_cl("\tIn which both numbers are smaller than 4.");
+    puts_cl("\nSource : https://en.wikipedia.org/wiki/Prime_number");
 }
 
 /*
@@ -78,7 +146,12 @@ void clearBuffer(void)
     }
 }
 
-// verification if nbr is not too high before calculation
+/*
+ * askNumber:
+ * demande un nombre à l'utilisateur
+ * return :
+ * le nombre
+ */
 int askNumber(void)
 {
     // puts("How many primary numbers would you like ?");
@@ -166,6 +239,11 @@ int power(int nbr, int puiss)
     return pnbr;
 }
 
+/*
+ * puts_deb:
+ * affiche un message
+ * avec "$message" en violet
+ */
 void puts_deb(char *message)
 {
     printf(MAGENTA);
@@ -173,6 +251,11 @@ void puts_deb(char *message)
     printf(INIT);
 }
 
+/*
+ * puts_error:
+ * affiche un message
+ * avec "/!\ message" en rouge
+ */
 void puts_error(char *message)
 {
     printf(BOLD);
@@ -181,10 +264,97 @@ void puts_error(char *message)
     printf(INIT);
 }
 
+/*
+ * puts_success:
+ * affiche un message
+ * avec "message" en vert
+ */
 void puts_success(char *message)
 {
     printf(BOLD);
     printf(GREEN);
     printf("%s\n", message);
     printf(INIT);
+}
+
+/*
+ * puts_cl:
+ *
+ * &b -> blue
+ * &r -> red
+ * &y -> yellow
+ * &g -> green
+ * &m -> magenta
+ *
+ * &i -> italic
+ * &u -> underline
+ * &o -> bold
+ * &l -> blink
+ * &e -> reversed
+ *
+ * &/ -> reset
+ * Example :
+ * puts_cl("The company &b&iAlice & Co&/ is better than Eve & Co");
+ */
+void puts_cl(char *message)
+{
+    for (unsigned int i = 0; i < strlen(message); i++)
+    {
+        if (message[i] == '&')
+        {
+            i++;
+            gestion_cl(message[i]);
+        }
+        else
+            printf("%c", message[i]);
+    }
+    printf(INIT);
+    printf("\n");
+}
+
+/*
+ * gestion_cl:
+ * modify carcateristics of display
+ */
+void gestion_cl(char motif)
+{
+    switch (motif)
+    {
+    case 'b':
+        printf(BLUE);
+        break;
+    case 'r':
+        printf(RED);
+        break;
+    case 'g':
+        printf(GREEN);
+        break;
+    case 'y':
+        printf(YELLOW);
+        break;
+    case 'm':
+        printf(MAGENTA);
+        break;
+    case 'o':
+        printf(BOLD);
+        break;
+    case 'i':
+        printf(ITALIC);
+        break;
+    case 'u':
+        printf(UNDERLINE);
+        break;
+    case 'l':
+        printf(BLINK);
+        break;
+    case 'e':
+        printf(REVERSED);
+        break;
+    case '/':
+        printf(INIT);
+        break;
+    default:
+        printf("& ");
+        break;
+    }
 }
