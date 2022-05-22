@@ -3,18 +3,28 @@
 #include "prime_nbr.h"
 #include <dirent.h>
 
-#define DIRECTORY_DATA "data"
+#define NAME_DIRECTORY_DATA "data"
+#define DIRECTORY_DATA "./" NAME_DIRECTORY_DATA
 
-int saveData(Q_PrimeNumbers * prime_numbers_queue, const char fileName[]);
-int backUpData(Q_PrimeNumbers *prime_numbers_queue, const char filename[]);
+#define NAME_DIRECTORY_EXPORT "export"
+#define DIRECTORY_EXPORT "./" NAME_DIRECTORY_EXPORT
+
+#define PNBA 0
+#define CSV 1
+
+int saveDataBinary(Q_PrimeNumbers * prime_numbers_queue, const char fileName[]);
+int readDataBinary(Q_PrimeNumbers *prime_numbers_queue, const char filename[]);
 
 int listFiles(char *path);
+int countFiles(char *path);
+int extractFileName(char *path, unsigned int item, char *fileName);
 int fileExist(char * path, char * fileName);
 
-void directoryExist(void);
-int saveFile(Q_PrimeNumbers * prime_numbers_queue);
-void formatingFileName(char *fileName);
-void formatingPath(char *fileName, char *path);
+void directoryExist(char *directory);
+int exportFile(Q_PrimeNumbers * prime_numbers_queue);
+int saveFile(Q_PrimeNumbers *prime_numbers_queue, Bool mode);
+void formatingFileName(char *fileName, char *extension);
+void formatingPath(char *fileName, char *directory, char *path);
 
 int openFile(Q_PrimeNumbers * prime_numbers_queue);
 

@@ -2,9 +2,9 @@
 #define _H_ARR_
 #include <stdio.h>
 
-/*your declaration here */
+#define COLUMNS 10
 
-int arrlen(int *array);
+unsigned int arrlen(int *array);
 void showArray(int *array);
 void fillArray(int *list_numbers, int *odd_numbers, int nbr);
 void fillArrayOddNumbers(int *odd_numbers, int nbr);

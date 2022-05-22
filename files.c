@@ -1,12 +1,32 @@
 #include "./headers/files.h"
 
-int saveData(Q_PrimeNumbers *prime_numbers_queue, const char fileName[])
+int saveData(Q_PrimeNumbers *prime_numbers_queue, const char *path){
+    
+    FILE *file = fopen(path, "w");
+    if (file == NULL)
+    {
+        puts_error("MESSAGE_ERREUR_FICHER");
+        return 1;
+    }
+
+    PrimeNumber *E = prime_numbers_queue->first;
+    fprintf(file, "prime number;x;y;r;theta\n");
+    while (E != NULL)
+    {
+        fprintf(file, "%d;%d;%lf;%lf;%lf\n", E->primeNumber, E->coord_polar.r, E->coord_polar.theta, E->coord_cartesian.x, E->coord_cartesian.y);
+        E = E->next;
+    }
+    fclose(file);
+    return 0;
+}
+
+int saveDataBinary(Q_PrimeNumbers *prime_numbers_queue, const char fileName[])
 {
     printf("Création du fichier %s\n", fileName);
     FILE *file = fopen(fileName, "w");
     if (file == NULL)
     {
-        puts("MESSAGE_ERREUR_FICHER");
+        puts_error("MESSAGE_ERREUR_FICHER");
         return 1;
     }
     PrimeNumber *E = prime_numbers_queue->first;
@@ -19,13 +39,13 @@ int saveData(Q_PrimeNumbers *prime_numbers_queue, const char fileName[])
     return 0;
 }
 
-int backUpData(Q_PrimeNumbers *prime_numbers_queue, const char fileName[])
+int readDataBinary(Q_PrimeNumbers *prime_numbers_queue, const char fileName[])
 {
     printf("Lecture du fichier %s\n", fileName);
     FILE *file = fopen(fileName, "r");
     if (file == NULL)
     {
-        puts("MESSAGE_ERREUR_FICHER");
+        puts_error("MESSAGE_ERREUR_FICHER");
         return 1;
     }
     PrimeNumber E;
@@ -40,9 +60,13 @@ int backUpData(Q_PrimeNumbers *prime_numbers_queue, const char fileName[])
     return 0;
 }
 
+//---------------------------------
+
 /*
  * listFiles:
  *
+ * return :
+ * number of file in directory
  */
 int listFiles(char *path)
 {
@@ -54,8 +78,8 @@ int listFiles(char *path)
 
     while ((dir = readdir(directory)) != NULL)
     {
-        if (dir->d_type == 8)   // file -> 8 / directory -> 4
-        { 
+        if (dir->d_type == 8) // file -> 8 / directory -> 4
+        {
             printf("\t%d - %s%s%s\n", count, BLUE, dir->d_name, INIT);
             count++;
         }
@@ -66,6 +90,48 @@ int listFiles(char *path)
         return -1;
     }
     return count;
+}
+
+int countFiles(char *path)
+{
+    unsigned int count = 0;
+    struct dirent *dir;
+    DIR *directory = opendir(path);
+    if (directory == NULL)
+        return -1;
+
+    while ((dir = readdir(directory)) != NULL)
+        if (dir->d_type == 8) // file -> 8 / directory -> 4
+            count++;
+    if (closedir(directory))
+        return -1;
+    return count;
+}
+
+int extractFileName(char *path, unsigned int item, char *fileName)
+{
+    unsigned int count = 0;
+    struct dirent *dir;
+    DIR *directory = opendir(path);
+    if (directory == NULL)
+        return -1;
+
+    while ((dir = readdir(directory)) != NULL)
+    {
+        if (dir->d_type == 8) // file -> 8 / directory -> 4
+        {
+            if (count == item)
+            {
+                strcpy(fileName, dir->d_name);
+                closedir(directory);
+                return 1;
+            }
+            count++;
+        }
+    }
+    if (closedir(directory))
+        return -1;
+    return 0;
 }
 
 /*
@@ -96,18 +162,34 @@ int fileExist(char *path, char *fileName)
     return exist;
 }
 
-void directoryExist(void)
+void directoryExist(char *directory)
 {
-    if (fileExist(".", DIRECTORY_DATA) == False)
+    char *command = (char *)calloc(LEN_FILE, sizeof(char));
+    if (allocTestChar(command, "var command"))
+        return;
+    
+    if (fileExist(".", directory) == False)
     {
-        printf("directory \"%s\" doesn't exist\n", DIRECTORY_DATA);
-        system("mkdir data");
+        strcpy(command, "mkdir ");
+        strcat(command, directory);
+        printf("directory \"%s\" doesn't exist\n", directory);
+        system(command);
+        puts("directory created");
     }
+    free(command);
+    command = NULL;
 }
 
-int saveFile(Q_PrimeNumbers *prime_numbers_queue)
+//------------------
+
+int exportFile(Q_PrimeNumbers *prime_numbers_queue)
 {
-    directoryExist();
+    if (length_queue(prime_numbers_queue) == 0)
+    {
+        puts("queue empty : no data...");
+        return 1;
+    }
+
     char *response = (char *)calloc(LEN_FILE, sizeof(char));
     if (allocTestChar(response, "var user response"))
         return -1;
@@ -116,24 +198,77 @@ int saveFile(Q_PrimeNumbers *prime_numbers_queue)
     if (allocTestChar(path, "var user path"))
         return -1;
 
-    if(length_queue(prime_numbers_queue) == 0){
-        puts("queue empty : no data...");
-        return 1;
-    }
-
-    while(1){
+    while (1)
+    {
         printf("file name : ");
         scan(response, LEN_FILE);
-        formatingFileName(response);
-        if(fileExist("./data", response))
+        formatingFileName(response, ".pnba");
+        if (fileExist("./data", response))
             puts("The name of the file is already exist. chose another one.");
-        else{
+        else
+        {
             printf("final file name : %s\n", response);
-            if(request_continue(prime_numbers_queue, 0, "do you validate the name of the file?") == True)
+            if (request_continue(prime_numbers_queue, 0, "do you validate the name of the file?") == True)
                 break;
         }
     }
-    formatingPath(response, path);
+    formatingPath(response, NAME_DIRECTORY_DATA, path);
+    printf("path : %s\n", path);
+    saveDataBinary(prime_numbers_queue, path);
+
+    free(path);
+    path = NULL;
+    free(response);
+    response = NULL;
+    return 0;
+}
+
+int saveFile(Q_PrimeNumbers *prime_numbers_queue, Bool mode)
+{
+    if (length_queue(prime_numbers_queue) == 0)
+    {
+        puts("queue empty : no data...");
+        return 1;
+    }
+    
+    directoryExist(NAME_DIRECTORY_EXPORT);
+    directoryExist(NAME_DIRECTORY_DATA);
+
+    char *response = (char *)calloc(LEN_FILE, sizeof(char));
+    if (allocTestChar(response, "var user response"))
+        return -1;
+
+    char *path = (char *)calloc(LEN_FILE, sizeof(char));
+    if (allocTestChar(path, "var user path"))
+        return -1;
+
+    char *directory, *directory_name;
+
+    while (1)
+    {
+        printf("file name : ");
+        scan(response, LEN_FILE);
+        if(mode == CSV){
+            formatingFileName(response, ".csv");
+            directory = DIRECTORY_EXPORT;
+            directory_name = NAME_DIRECTORY_EXPORT;
+        }
+        else{
+            formatingFileName(response, ".pnba");
+            directory = DIRECTORY_DATA;
+            directory_name = NAME_DIRECTORY_DATA;
+        }
+
+        if (fileExist(directory, response))
+            puts("The name of the file is already exist. chose another one.");
+        else
+        {
+            printf("final file name : %s\n", response);
+            if (request_continue(prime_numbers_queue, 0, "do you validate the name of the file?") == True)
+                break;
+        }
+    }
+    formatingPath(response, directory_name, path);
     printf("path : %s\n", path);
     saveData(prime_numbers_queue, path);
 
@@ -146,7 +281,7 @@ int saveFile(Q_PrimeNumbers *prime_numbers_queue)
 
 // delete all space
 // if detect space
-void formatingFileName(char *fileName)
+void formatingFileName(char *fileName, char *extension)
 {
     char *fileNameBuffer = (char *)calloc(LEN_FILE, sizeof(char));
     if (allocTestChar(fileNameBuffer, "var user response"))
@@ -159,26 +294,30 @@ void formatingFileName(char *fileName)
             i++;
         if (fileName[i] == '.')
             break;
-        //printf("\t%c\n", fileName[i]);
+        // printf("\t%c\n", fileName[i]);
         fileNameBuffer[a] = fileName[i];
         a++;
     }
 
-    strcat(fileNameBuffer, ".pnba");
+    strcat(fileNameBuffer, extension);
     strcpy(fileName, fileNameBuffer);
     free(fileNameBuffer);
     fileNameBuffer = NULL;
 }
 
-void formatingPath(char *fileName, char *path)
+void formatingPath(char *fileName, char *directory, char *path)
 {
-    strcpy(path, DIRECTORY_DATA);
+    strcpy(path, directory);
     strcat(path, "/");
     strcat(path, fileName);
 }
 
 int openFile(Q_PrimeNumbers *prime_numbers_queue)
 {
+    if (request_continue(prime_numbers_queue, 1, "A queue already exists, do you want to delete it ?") == False)
+        return 1;
+    free_queue(prime_numbers_queue);
+
     char *response = (char *)calloc(LEN_FILE, sizeof(char));
     if (allocTestChar(response, "var user response"))
         return -1;
@@ -187,24 +326,30 @@ int openFile(Q_PrimeNumbers *prime_numbers_queue)
         return -1;
 
     printf("files : \n\n");
+    puts("\tSelect file with his name or identification number.\n");
     if (listFiles("./data") == 0)
     {
         puts("0 files");
         return 1;
     }
 
-    puts("\tcall \"exit\" for cancel.\n");
+    puts("\tCall \"exit\" for cancel.\n");
     while (1)
     {
         printf("Select File : ");
         scan(response, LEN_FILE);
         if (strcmp(response, "exit") == 0)
             break;
-        formatingFileName(response);
+
+        int item = strToInt(response);
+        if (item != -1 && countFiles("./data") >= item)
+            extractFileName("./data", item, response); // extract file name n°
+        else
+            formatingFileName(response, ".pnba");
         if (fileExist("./data", response))
         {
-            formatingPath(response, path);
-            backUpData(prime_numbers_queue, path);
+            formatingPath(response, NAME_DIRECTORY_DATA, path);
+            readDataBinary(prime_numbers_queue, path);
             puts_success("Data imported");
             break;
         }
