@@ -19,8 +19,8 @@ unsigned int arrlen(int *array)
  */
 void showArray(int *array)
 {
-    //int colums = 10;
-    // printf("\nsize of array : %d - %d\n", array[0], array[0] - 1);
+    // int colums = 10;
+    //  printf("\nsize of array : %d - %d\n", array[0], array[0] - 1);
     printf("\nsize of array : %d\n", array[0]);
     printf("\n\n");
     for (unsigned int i = 1, a = 1; i < arrlen(array); i++)
@@ -76,4 +76,18 @@ void fillArrayOddNumbers(int *odd_numbers, int nbr)
             a++;
         }
     }
+}
+
+double maxArray(double tab[], const unsigned int size)
+{
+    for (unsigned int i = 1; i < size; ++i)
+        if (tab[0] < tab[i])
+            tab[0] = tab[i];
+    return tab[0];
+}
+
+void showArrayD(double tab[], const unsigned int size)
+{
+    for (unsigned int i = 0; i < size; ++i)
+        printf("%lf\n", tab[i]);
 }

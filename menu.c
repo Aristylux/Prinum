@@ -75,18 +75,21 @@ void showMenu(Bool isHelp)
     if (isHelp == True)
         puts_cl(":\n\t\t&oExport&/ the list in format .pnba");
     printf("\n\t(8)  Enregistrer la liste");
-    if(isHelp == True)
+    if (isHelp == True)
         puts_cl(":\n\t\t&oExport&/ the list in format .csv");
     printf("\n\t(9)  Importer une liste de nombre premier");
     if (isHelp == True)
         puts_cl(":\n\t\t&oImport&/ the list in format .pnba");
-    printf("\n\t(10)  Afficher le graphique");
+    printf("\n\t(10) Afficher le graphique");
     if (isHelp == True)
         puts_cl(":\n\t\t&i&mFeature under development&/");
-    printf("\n\t(11) Definition d'un nombre premier");
+    printf("\n\t(11) Vider la liste");
+    if (isHelp == True)
+        puts_cl(":\n\t\t&i&mClear list&/");
+    printf("\n\t(12) Definition d'un nombre premier");
     if (isHelp == True)
         puts_cl(":\n\t\t&oDisplays&/ the definition of a prime number and example.");
-    printf("\n\t(12) Aide");
+    printf("\n\t(13) Aide");
     if (isHelp == True)
         puts_cl(":\n\t\t&oShow&/ help.");
 }
@@ -172,6 +175,21 @@ int askNumber(void)
     free(response);
     response = NULL;
     return nbr;
+}
+
+int chrToInt(char chr)
+{
+    int number = 0;
+    const unsigned int nombresInt[10] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9};
+    const char nombresStr[10] = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9'};
+    for (unsigned int j = 0; j < 10; j++)
+    {
+        if (chr == nombresStr[j])
+        {
+            number = nombresInt[j];
+        }
+    }
+    return number;
 }
 
 /*
