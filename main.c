@@ -55,7 +55,6 @@ int main(void)
             PN_show_coordinate(&QueuePrimeNumbers);
             break;
         case 7:
-            //exportFile(&QueuePrimeNumbers);
             saveFile(&QueuePrimeNumbers, PNBA);
             break;
         case 8:
@@ -83,7 +82,7 @@ int main(void)
             break;
         }
     }
-
+    puts("Liberation des elements alloués");
     free_queue(&QueuePrimeNumbers);
     free(response);
     response = NULL;

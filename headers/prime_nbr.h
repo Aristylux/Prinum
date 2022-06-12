@@ -49,4 +49,6 @@ PrimeNumber *last_element_queue(Q_PrimeNumbers *queue);
 
 Bool request_continue(Q_PrimeNumbers *queue, unsigned int nbr, char *message);
 
+unsigned int refresh(unsigned int max, unsigned int value, unsigned int progress);
+
 #endif

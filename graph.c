@@ -45,7 +45,7 @@ int openGraph(Q_PrimeNumbers *prime_numbers_queue)
     tab[2] = min_y;
     tab[3] = max_y;
 
-    showArrayD(tab, 4);
+    //showArrayD(tab, 4);
     double val_max = maxArray(tab, 4);
     printf("value max = %lf\n", val_max);
     double divid = val_max / (1000 / 2); //1000 is heigth of the window
@@ -54,12 +54,10 @@ int openGraph(Q_PrimeNumbers *prime_numbers_queue)
     Element = prime_numbers_queue->first;
     while (Element != NULL)
     {
-        G_addPoint(window, renderer, Element->coord_cartesian.x/divid, Element->coord_cartesian.y/divid);
+        renderer = G_addPoint(window, renderer, Element->coord_cartesian.x/divid, Element->coord_cartesian.y/divid);
         Element = Element->next;
     }
-
-    //G_addPoint(window, renderer, 0, 0);
-
+    SDL_RenderPresent(renderer);
 
     Bool graph_open = True;
     while (graph_open)

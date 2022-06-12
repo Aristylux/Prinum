@@ -104,13 +104,13 @@ void SDL_DrawColor(SDL_Window *window, SDL_Renderer *renderer, const char *color
         SDL_ExitWithErrorDestroy(window, renderer, "Unable to change color for rendering");
 }
 
-void G_addPoint(SDL_Window *window, SDL_Renderer *renderer, const double x, const double y)
+SDL_Renderer *G_addPoint(SDL_Window *window, SDL_Renderer *renderer, const double x, const double y)
 {
     int h_win, w_win;
     SDL_GetRendererOutputSize(renderer, &w_win, &h_win);
 
     SDL_DrawColor(window, renderer, YELLOW_SDL);
-    printf("(%f,%f) -> (%f,%f)\n", x, y, x + w_win / 2, y + h_win / 2);
+    // printf("(%f,%f) -> (%f,%f)\n", x, y, x + w_win / 2, y + h_win / 2);
 
     if (SDL_RenderDrawPointF(renderer, x + w_win / 2, y + h_win / 2) != 0)
         SDL_ExitWithError("Impossible de dessiner un point");
@@ -121,7 +121,8 @@ void G_addPoint(SDL_Window *window, SDL_Renderer *renderer, const double x, cons
     if (SDL_RenderFillRect(renderer, &pt) != 0)
         SDL_ExitWithErrorDestroy(window, renderer, "rect point");
     */
-    SDL_RenderPresent(renderer);
+    // SDL_RenderPresent(renderer);
+    return renderer;
 }
 
 Bool G_actions(SDL_Window *window, SDL_Event event)
@@ -135,7 +136,8 @@ Bool G_actions(SDL_Window *window, SDL_Event event)
             active = False;
             break;
         case SDL_MOUSEBUTTONDOWN:
-            screenShot(window);
+            // screenShot(window);
+            messageBox();
             break;
         default:
             break;
@@ -165,4 +167,44 @@ void screenShot(SDL_Window *window)
     SDL_RenderReadPixels(renderer, NULL, SDL_PIXELFORMAT_ARGB8888, sshot->pixels, sshot->pitch);
     SDL_SaveBMP(sshot, "screenshot2.bmp");
     SDL_FreeSurface(sshot);
+}
+
+void messageBox(void)
+{
+    const SDL_MessageBoxButtonData buttons = {
+        SDL_MESSAGEBOX_BUTTON_RETURNKEY_DEFAULT,
+        1,
+        "test",
+    };
+
+    SDL_MessageBoxColorScheme colorScheme = {
+        {/* .colors (.r, .g, .b) */
+         /* [SDL_MESSAGEBOX_COLOR_BACKGROUND] */
+         {255, 255, 255},
+         /* [SDL_MESSAGEBOX_COLOR_TEXT] */
+         {0, 0, 0},
+         /* [SDL_MESSAGEBOX_COLOR_BUTTON_BORDER] */
+         {255, 255, 0},
+         /* [SDL_MESSAGEBOX_COLOR_BUTTON_BACKGROUND] */
+         {0, 0, 255},
+         /* [SDL_MESSAGEBOX_COLOR_BUTTON_SELECTED] */
+         {255, 0, 255}}};
+
+    SDL_MessageBoxData messageBoxData;
+    messageBoxData.flags = SDL_MESSAGEBOX_INFORMATION;
+    messageBoxData.window = NULL;
+    messageBoxData.title = "Test tilte";
+    messageBoxData.message = "message";
+    messageBoxData.numbuttons = 1;
+    messageBoxData.buttons = &buttons;
+    messageBoxData.colorScheme = &colorScheme;
+
+    int buttonId;
+    if (SDL_ShowMessageBox(&messageBoxData, &buttonId) < 0)
+        SDL_ExitWithError("error displaying message box");
+
+    if (buttonId == -1)
+        SDL_Log("no selection");
+    else
+        SDL_Log("selection was %d", buttonId);
 }

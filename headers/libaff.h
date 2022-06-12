@@ -27,9 +27,10 @@ void G_CreateBackground(SDL_Window *window, SDL_Renderer *renderer);
 
 void SDL_DrawColor(SDL_Window *window, SDL_Renderer *renderer, const char *color);
 
-void G_addPoint(SDL_Window *window, SDL_Renderer *renderer, const double x, const double y);
+SDL_Renderer * G_addPoint(SDL_Window *window, SDL_Renderer *renderer, const double x, const double y);
 Bool G_actions(SDL_Window *window, SDL_Event event);
 
 void screenShot(SDL_Window *window);
+void messageBox(void);
 
 #endif
