@@ -12,20 +12,23 @@
 #define PNBA 0
 #define CSV 1
 
-int saveDataBinary(Q_PrimeNumbers * prime_numbers_queue, const char fileName[]);
+int exportFile(Q_PrimeNumbers *prime_numbers_queue);
+int saveFile(Q_PrimeNumbers *prime_numbers_queue, Bool mode);
+int openFile(Q_PrimeNumbers *prime_numbers_queue);
+
+char *demandFileName(Q_PrimeNumbers *prime_numbers_queue, char *response, Bool mode, char *directory_name);
+
+int saveData(Q_PrimeNumbers *prime_numbers_queue, const char *path);
+int saveDataBinary(Q_PrimeNumbers *prime_numbers_queue, const char fileName[]);
 int readDataBinary(Q_PrimeNumbers *prime_numbers_queue, const char filename[]);
 
 int listFiles(char *path);
 int countFiles(char *path);
 int extractFileName(char *path, unsigned int item, char *fileName);
-int fileExist(char * path, char * fileName);
+int fileExist(char *path, char *fileName);
 
 void directoryExist(char *directory);
-int exportFile(Q_PrimeNumbers * prime_numbers_queue);
-int saveFile(Q_PrimeNumbers *prime_numbers_queue, Bool mode);
 void formatingFileName(char *fileName, char *extension);
 void formatingPath(char *fileName, char *directory, char *path);
-
-int openFile(Q_PrimeNumbers * prime_numbers_queue);
 
 #endif

@@ -18,6 +18,7 @@ void clearBuffer(void);
 int askNumber(void);
 
 // conversion
+int chrToInt(char chr);
 int strToInt(char *string);
 void invert(char *str);
 int power(int nbr, int puiss);

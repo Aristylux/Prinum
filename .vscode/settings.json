@@ -1,6 +1,7 @@
 {
     "files.associations": {
-        "alloc.h": "c",
-        "menu.h": "c"
+        "libaff.h": "c",
+        "menu.h": "c",
+        "arr.h": "c"
     }
 }

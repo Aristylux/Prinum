@@ -45,7 +45,7 @@ ec:
 	@echo 'SRC = $(value SRC)'
 	@echo 'OBJ = $(value OBJ)'
 
-LIBS= -lm
+LIBS= -lm -lSDL2 -lSDL2_ttf
 
 #all -> ensemble des executables a produire
 all:$(EXEC)

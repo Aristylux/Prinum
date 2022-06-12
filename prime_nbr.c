@@ -54,8 +54,9 @@ Q_PrimeNumbers *PN_calc_until(Q_PrimeNumbers *prime_numbers_queue)
         return NULL;
 
     fillArray(list_numbers, odd_numbers, nbr);
-
+    //time of research ?
     prime_numbers_queue = researchPrimeNumber(nbr, prime_numbers_queue, list_numbers, odd_numbers);
+
     puts("Finish.");
     free(list_numbers);
     list_numbers = NULL;
@@ -74,7 +75,7 @@ void PN_calc_nPN(Q_PrimeNumbers *prime_numbers_queue)
 
     free_queue(prime_numbers_queue);
     puts("Init");
-    unsigned int current_nbr = 1, count = 1;
+    unsigned int current_nbr = 1, count = 1, progress = 0;
     while (count <= nbr)
     {
         // printf("c : %d - \t n : %d\n", current_nbr, count);
@@ -83,11 +84,38 @@ void PN_calc_nPN(Q_PrimeNumbers *prime_numbers_queue)
             COORD_polar coordP = {current_nbr, current_nbr * 10};
             COORD_cartesian coordC = polToCart(coordP);
             enQueue(prime_numbers_queue, current_nbr, coordC, coordP);
+            progress = refresh(nbr, count, progress);
             count++;
         }
         current_nbr++;
     }
     puts("Finish.");
+}
+
+unsigned int refresh(unsigned int max, unsigned int value, unsigned int progress)
+{
+
+    double new_progress = (value * 100) / max;
+
+    if (progress != new_progress)
+    {
+        char *progressBar = (char *)calloc(21, sizeof(char));
+        if (allocTestChar(progressBar, "progressBar"))
+            return 0;
+        for (int i = 0; i < 20; i++)
+            progressBar[i] = '-';
+
+        for (int i = 0; i < (int)new_progress / 5; i++)
+            progressBar[i] = '#';
+
+        system("clear");
+        printf("%3d%%|%s|\n", (int) new_progress, progressBar);
+
+        free(progressBar);
+        progressBar = NULL;
+    }
+
+    return new_progress;
 }
 
 /*
@@ -96,15 +124,15 @@ void PN_calc_nPN(Q_PrimeNumbers *prime_numbers_queue)
  */
 Q_PrimeNumbers *researchPrimeNumber(int nbr, Q_PrimeNumbers *prime_numbers_queue, int *list_numbers, int *odd_numbers)
 {
+    unsigned int progress = 0;
     for (int i = 1; i < nbr + 1; i++)
     {
         if (isPrimeNumber(list_numbers[i], odd_numbers) == 1)
         {
-            // Element = create_node(list_numbers[i]);
-            // prime_number_list = insert_node(prime_number_list, Element);
             COORD_polar coordP = {list_numbers[i], list_numbers[i] * 10};
             COORD_cartesian coordC = polToCart(coordP);
             enQueue(prime_numbers_queue, list_numbers[i], coordC, coordP);
+            progress = refresh(nbr+1, i, progress);
         }
     }
     return prime_numbers_queue;
@@ -243,7 +271,7 @@ void PN_show_numbers(Q_PrimeNumbers *queue)
 
     while (1)
     {
-        //printf("%s%d - %d%s\n", RED, i, Element->primeNumber, INIT);
+        // printf("%s%d - %d%s\n", RED, i, Element->primeNumber, INIT);
 
         if (i == Element->primeNumber)
         {

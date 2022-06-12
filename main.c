@@ -8,6 +8,7 @@
 #include "./headers/prime_nbr.h"
 #include "./headers/arr.h"
 #include "./headers/files.h"
+#include "./headers/graph.h"
 
 /*
 valgrind --leak-check=full ./prog 
@@ -54,7 +55,6 @@ int main(void)
             PN_show_coordinate(&QueuePrimeNumbers);
             break;
         case 7:
-            //exportFile(&QueuePrimeNumbers);
             saveFile(&QueuePrimeNumbers, PNBA);
             break;
         case 8:
@@ -64,12 +64,16 @@ int main(void)
             openFile(&QueuePrimeNumbers);
             break;
         case 10:
-            puts("open graph");
+            openGraph(&QueuePrimeNumbers);
             break;
         case 11:
-            definition();
+            free_queue(&QueuePrimeNumbers);
+            puts("Queue is clear.");
             break;
         case 12:
+            definition();
+            break;
+        case 13:
             showMenu(True);
             break;
         default:
@@ -78,7 +82,7 @@ int main(void)
             break;
         }
     }
-
+    puts("Liberation des elements alloués");
     free_queue(&QueuePrimeNumbers);
     free(response);
     response = NULL;
