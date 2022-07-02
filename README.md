@@ -4,24 +4,28 @@ This is a project for learn c.
 
 This program calculate primes numbers.
 
-- ide : VS code
+- IDE : VS code
 
-- OS  : Linux - Ubuntu 20.04.4 LTS
+- OS  : Linux - Ubuntu 22.04.4 LTS
 
-command line:
-sudo apt install make
-sudo apt install gcc
+## Installation:
+### command line:
+`sudo apt install make`  
+`sudo apt install gcc`  
 
-for SDL library:
-sudo apt-get install libsdl2-dev
-sudo apt-get install libsdl2-ttf-dev //pour les polices
-sudo apt-get install libsdl2-image-dev //pour les images (png et jpg)
+### for SDL library:
+`sudo apt-get install libsdl2-dev`  
+for font:  
+`sudo apt-get install libsdl2-ttf-dev`  
+for pictures (png and jpg):  
+`sudo apt-get install libsdl2-image-dev`  
 
-compile:
-make all
+## Use:
+### Compile:
+`make all`
 
-launch:
-./prog
+### Launch:
+`./prog`
 
-clear project:
-make clear
+### Clear project:
+`make clear`
