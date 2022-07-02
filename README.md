@@ -4,9 +4,8 @@ This is a project for learn c.
 
 This program calculate primes numbers.
 
-- IDE : VS code
-
-- OS  : Linux - Ubuntu 22.04.4 LTS
+* IDE : VS code
+* OS  : Linux - Ubuntu 22.04.4 LTS
 
 ## Installation:
 ### command line:
