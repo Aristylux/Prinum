@@ -28,3 +28,11 @@ for pictures (png and jpg):
 
 ### Clear project:
 `make clear`
+
+# Results
+
+![result](./screenshot.bmp)
+
+![result](./screenshot1.bmp)
+
+![result](./screenshot2.bmp)
